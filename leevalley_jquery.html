@@ -1,0 +1,260 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><script type="text/javascript" src="/CFIDE/scripts/cfform.js"></script>
+<script type="text/javascript" src="/CFIDE/scripts/masks.js"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Lee Valley Login</title>
+<link href="JF.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<style>
+  .custom-combobox {
+    position: relative;
+    display: inline-block;
+  }
+  .custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+  }
+  .custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+  }
+</style>
+
+
+
+<script type="text/javascript">
+	if (window.ColdFusion) ColdFusion.required['Store']=true;
+</script>
+
+<script type="text/javascript">
+	if (window.ColdFusion) ColdFusion.required['Pass']=true;
+</script>
+</head>
+
+<body>
+<!-- dsp_carriers -->
+
+
+<p></p><p><p><p><center>
+<Img src="lee Valley.jpg" align="middle" />
+<p>
+<Table width=50% class="databox"><tr><td class="HugeTitle" align="center">Flyer Distribution Program</td></tr></Table>
+<!-- Retreive store locations for user name dropdown -->
+
+<p><p>
+<table class="databox" width=40%><form name="login" id="login" action="act_login.cfm" method="post" onsubmit="return _CF_checklogin(this)">
+<tr><td class="Title" align="right">Store #: </td><td align="left">
+	<!-- Populate storenames from all locations -->
+	<div class="ui-widget">
+	  <select name="Store" id="combobox">
+		  
+			  <option value="HEAD OFFIC">HEAD OFFIC - </option>
+		  
+			  <option value="HEAD OFFIC">HEAD OFFIC - Ottawa</option>
+		  
+			  <option value="LV001">LV001 - Victoria</option>
+		  
+			  <option value="LV002">LV002 - Vancouver</option>
+		  
+			  <option value="LV002B">LV002B - Vancouver</option>
+		  
+			  <option value="LV003">LV003 - Coquitlam</option>
+		  
+			  <option value="LV004">LV004 - Kelowna</option>
+		  
+			  <option value="LV004B">LV004B - Kelowna</option>
+		  
+			  <option value="LV005">LV005 - Edmonton</option>
+		  
+			  <option value="LV006">LV006 - Calgary</option>
+		  
+			  <option value="LV007">LV007 - Saskatoon</option>
+		  
+			  <option value="LV008">LV008 - Winnipeg</option>
+		  
+			  <option value="LV009">LV009 - Halifax</option>
+		  
+			  <option value="LV009B">LV009B - Halifax</option>
+		  
+			  <option value="LV010">LV010 - Ottawa</option>
+		  
+			  <option value="LV011">LV011 - Kingston</option>
+		  
+			  <option value="LV012">LV012 - Vaughan</option>
+		  
+			  <option value="LV013">LV013 - Toronto</option>
+		  
+			  <option value="LV014">LV014 - Scarborough</option>
+		  
+			  <option value="LV015">LV015 - Burlington</option>
+		  
+			  <option value="LV016">LV016 - Waterloo</option>
+		  
+			  <option value="LV017">LV017 - London</option>
+		  
+			  <option value="LV018">LV018 - Windsor</option>
+		  
+			  <option value="LV019">LV019 - Niagara Falls</option>
+		  
+			  <option value="LV019A">LV019A - Niagara Falls</option>
+		  
+			  <option value="LV019B">LV019B - Niagara Falls</option>
+		  
+	  </select>
+	</div>
+<!-- old input
+<input name="Store" id="Store"  type="text" size="10"  />--></td></tr>
+<tr><td class="Title" align="right">Password: </td><td align="left"><input name="Pass" id="Pass"  type="password" size="10"  /></td></tr>
+<tr><td colspan="2" align="center"><input name="Submit" id="Submit"  type="submit" value="Login" /></td></tr>
+</form>
+
+</table>
+<p> 
+
+<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<span>" )
+          .addClass( "custom-combobox" )
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+        this._createShowAllButton();
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),
+          value = selected.val() ? selected.text() : "";
+ 
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )
+          .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+          .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: $.proxy( this, "_source" )
+          })
+          .tooltip({
+            classes: {
+              "ui-tooltip": "ui-state-highlight"
+            }
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      _createShowAllButton: function() {
+        var input = this.input,
+          wasOpen = false;
+ 
+        $( "<a>" )
+          .attr( "tabIndex", -1 )
+          .attr( "title", "Show All Items" )
+          .tooltip()
+          .appendTo( this.wrapper )
+          .button({
+            icons: {
+              primary: "ui-icon-triangle-1-s"
+            },
+            text: false
+          })
+          .removeClass( "ui-corner-all" )
+          .addClass( "custom-combobox-toggle ui-corner-right" )
+          .on( "mousedown", function() {
+            wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+          })
+          .on( "click", function() {
+            input.trigger( "focus" );
+ 
+           
+            if ( wasOpen ) {
+              return;
+            }
+ 
+                        input.autocomplete( "search", "" );
+          });
+      },
+ 
+      _source: function( request, response ) {
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+         
+        if ( ui.item ) {
+          return;
+        }
+         
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        
+        if ( valid ) {
+          return;
+        }
+ 
+       
+        this.input
+          .val( "" )
+          .attr( "title", value + " didn't match any item" )
+          .tooltip( "open" );
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.autocomplete( "instance" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+ 
+    $( "#combobox" ).combobox();
+    $( "#toggle" ).on( "click", function() {
+      $( "#combobox" ).toggle();
+    });
+  } );
+  </script>
+</script>
+</body>
+</html>
